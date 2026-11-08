@@ -16,8 +16,8 @@ const UserDashboard = () => {
   
   // STRICT FILTER: Pulls the exact email saved during the user's login. 
   // If no email is found, defaults to a safe string to prevent app crashes.
-  const userEmail = localStorage.getItem('email') || 'session_expired@citizen.com';
-  const userName = localStorage.getItem('name') || 'Citizen User';
+  const userEmail = safeStorage.getItem('email') || 'session_expired@citizen.com';
+  const userName = safeStorage.getItem('name') || 'Citizen User';
 
   const fetchData = useCallback(async () => {
     setIsSyncing(true);
@@ -41,7 +41,7 @@ const UserDashboard = () => {
   }, [fetchData]);
 
   const handleLogout = () => {
-    localStorage.clear();
+    safeStorage.clear();
     navigate('/');
   };
 

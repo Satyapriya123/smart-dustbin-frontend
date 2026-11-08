@@ -44,7 +44,7 @@ const AdminDashboard = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.clear();
+    safeStorage.clear();
     navigate('/');
   };
 

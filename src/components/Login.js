@@ -10,14 +10,14 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     if (email === 'admin@distronix.in' && password === 'admin123') {
-      localStorage.setItem('email', email);
-      localStorage.setItem('name', 'System Admin');
-      localStorage.setItem('role', 'admin');
+      safeStorage.setItem('email', email);
+      safeStorage.setItem('name', 'System Admin');
+      safeStorage.setItem('role', 'admin');
       navigate('/admin');
     } else if (email.includes('@') && password.length > 3) {
-      localStorage.setItem('email', email);
-      localStorage.setItem('name', email.split('@')[0]);
-      localStorage.setItem('role', 'citizen');
+      safeStorage.setItem('email', email);
+      safeStorage.setItem('name', email.split('@')[0]);
+      safeStorage.setItem('role', 'citizen');
       navigate('/user');
     } else {
       setError('Invalid credentials. Citizens can use any valid email.');
