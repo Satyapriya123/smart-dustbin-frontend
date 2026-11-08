@@ -20,7 +20,7 @@ const AdminDashboard = () => {
     
     // 1. Fetch telemetry data INDEPENDENTLY
     try {
-      const binRes = await axios.get('https://YOUR-BACKEND-NAME.onrender.com/api/dustbins');
+      const binRes = await axios.get('https://smart-dustbin-backend-rzjf.onrender.com/api/dustbins');
       setDustbins(binRes.data);
     } catch (error) {
       console.error("Error fetching telemetry:", error);
@@ -28,7 +28,7 @@ const AdminDashboard = () => {
 
     // 2. Fetch live ticket data INDEPENDENTLY
     try {
-      const ticketRes = await axios.get('https://YOUR-BACKEND-NAME.onrender.com/api/tickets/admin-dashboard/get-all');
+      const ticketRes = await axios.get('https://smart-dustbin-backend-rzjf.onrender.com/api/tickets/admin-dashboard/get-all');
       setTickets(ticketRes.data);
     } catch (error) {
       console.error("Error fetching admin tickets:", error);
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
   // --- Admin Ticket Action Handler ---
   const handleUpdateTicketStatus = async (ticketId, newStatus) => {
     try {
-      await axios.put(`https://YOUR-BACKEND-NAME.onrender.com/api/tickets/${ticketId}/status`, { status: newStatus });
+      await axios.put(`https://smart-dustbin-backend-rzjf.onrender.com/api/tickets/${ticketId}/status`, { status: newStatus });
       fetchData(); // Refresh the list instantly to show the new status
     } catch (error) {
       console.error("Error updating ticket status", error);

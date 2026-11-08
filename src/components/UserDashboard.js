@@ -22,11 +22,11 @@ const UserDashboard = () => {
   const fetchData = useCallback(async () => {
     setIsSyncing(true);
     try {
-      const binRes = await axios.get('https://YOUR-BACKEND-NAME.onrender.com/api/dustbins');
+      const binRes = await axios.get('https://smart-dustbin-backend-rzjf.onrender.com/api/dustbins');
       setDustbins(binRes.data);
       
       // The backend automatically filters and returns ONLY tickets matching this specific user's email
-      const ticketRes = await axios.get(`https://YOUR-BACKEND-NAME.onrender.com/api/tickets/user-dashboard/get/${userEmail}`);
+      const ticketRes = await axios.get(`https://smart-dustbin-backend-rzjf.onrender.com/api/tickets/user-dashboard/get/${userEmail}`);
       setTickets(ticketRes.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -55,7 +55,7 @@ const UserDashboard = () => {
     if (!newTicket.binId) return triggerAlert('Please select a Hardware ID.');
     
     try {
-      const res = await axios.post('https://YOUR-BACKEND-NAME.onrender.com/api/tickets/raise', {
+      const res = await axios.post('https://smart-dustbin-backend-rzjf.onrender.com/api/tickets/raise', {
         binId: newTicket.binId,
         issue: newTicket.issue,
         description: newTicket.description,
@@ -73,7 +73,7 @@ const UserDashboard = () => {
   const handleDeleteTicket = async (ticketId) => {
     if (!window.confirm("Are you sure you want to withdraw this ticket? This action cannot be undone.")) return;
     try {
-      await axios.delete(`https://YOUR-BACKEND-NAME.onrender.com/api/tickets/${ticketId}`);
+      await axios.delete(`https://smart-dustbin-backend-rzjf.onrender.com/api/tickets/${ticketId}`);
       setTickets(tickets.filter(t => t._id !== ticketId)); 
       triggerAlert('Ticket withdrawn successfully.');
     } catch (error) {

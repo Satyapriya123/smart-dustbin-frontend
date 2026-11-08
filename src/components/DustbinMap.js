@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ const DustbinMap = () => {
   useEffect(() => {
     const fetchBins = async () => {
       try {
-        const res = await axios.get('https://YOUR-BACKEND-NAME.onrender.com/api/dustbins');
+        const res = await axios.get('https://smart-dustbin-backend-rzjf.onrender.com/api/dustbins');
         setDustbins(res.data);
       } catch (error) {
         console.error("Error fetching dustbins", error);
