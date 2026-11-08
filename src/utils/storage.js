@@ -1,4 +1,4 @@
-﻿// Fallback memory store in case browser blocks localStorage
+// Fallback memory store in case browser blocks localStorage
 const memoryStore = {};
 
 export const safeStorage = {
