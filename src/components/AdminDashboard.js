@@ -12,12 +12,10 @@ const AdminDashboard = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [kpiFilter, setKpiFilter] = useState('all');
   const [isSyncing, setIsSyncing] = useState(false);
-  
 
   const fetchData = async () => {
     setIsSyncing(true);
     
-    // 1. Fetch telemetry data INDEPENDENTLY
     try {
       const binRes = await axios.get('https://smart-dustbin-backend-rzjf.onrender.com/api/dustbins');
       setDustbins(binRes.data);
@@ -25,7 +23,6 @@ const AdminDashboard = () => {
       console.error("Error fetching telemetry:", error);
     }
 
-    // 2. Fetch live ticket data INDEPENDENTLY
     try {
       const ticketRes = await axios.get('https://smart-dustbin-backend-rzjf.onrender.com/api/tickets/admin-dashboard/get-all');
       setTickets(ticketRes.data);
@@ -54,24 +51,21 @@ const AdminDashboard = () => {
     window.location.href = "/"; 
   };
 
-  // --- Admin Ticket Action Handler ---
   const handleUpdateTicketStatus = async (ticketId, newStatus) => {
     try {
       await axios.put(`https://smart-dustbin-backend-rzjf.onrender.com/api/tickets/${ticketId}/status`, { status: newStatus });
-      fetchData(); // Refresh the list instantly to show the new status
+      fetchData(); 
     } catch (error) {
       console.error("Error updating ticket status", error);
       alert("Failed to update ticket status.");
     }
   };
 
-  // --- KPI Calculations ---
   const totalBins = dustbins.length;
   const criticalBins = dustbins.filter(b => b.fillLevel > 80).length;
   const offlineBins = dustbins.filter(b => b.status !== 'online').length;
   const avgFill = totalBins ? Math.round(dustbins.reduce((acc, curr) => acc + curr.fillLevel, 0) / totalBins) : 0;
 
-  // --- Multi-Layer Filtering ---
   const filteredBins = dustbins.filter(bin => {
     const matchesSearch = bin.binId?.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           (bin.address && bin.address.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -88,7 +82,6 @@ const AdminDashboard = () => {
     setFilterStatus('all');
   };
 
-  // --- PDF/CSV Generators ---
   const generatePDF = () => {
     const doc = new jsPDF();
     doc.text("Environmental Compliance & Hardware Report", 14, 15);
@@ -113,7 +106,6 @@ const AdminDashboard = () => {
   const criticalLocations = dustbins.filter(b => b.fillLevel > 80 && b.location).map(b => [b.location.lat, b.location.lng]);
   const optimizedRoute = criticalLocations.length > 0 ? [[22.5726, 88.3639], ...criticalLocations] : [];
 
-  // --- View 1: Real-Time Telemetry ---
   const renderTelemetry = () => (
     <div style={styles.fadeAnim}>
       <div style={styles.kpiRow}>
@@ -132,19 +124,19 @@ const AdminDashboard = () => {
       </div>
 
       <div style={styles.filterRow}>
-        <input type="text" placeholder="ðŸ” Search Hardware ID..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={styles.searchInput} />
+        <input type="text" placeholder="🔍 Search Hardware ID..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={styles.searchInput} />
         <select value={filterStatus} onChange={(e) => {setFilterStatus(e.target.value); setKpiFilter('all');}} style={styles.selectInput}>
           <option value="all">All Network Statuses</option>
-          <option value="online">ðŸŸ¢ Online</option>
-          <option value="offline">ðŸ”´ Offline</option>
-          <option value="maintenance">ðŸŸ¡ Maintenance</option>
+          <option value="online">🟢 Online</option>
+          <option value="offline">🔴 Offline</option>
+          <option value="maintenance">🟡 Maintenance</option>
         </select>
       </div>
 
       <div style={styles.tableCard}>
         <div style={styles.tableHeaderContainer}>
           <h3 style={styles.tableHeader}>Active Sensor Database</h3>
-          <button onClick={fetchData} style={styles.syncBtn}>{isSyncing ? 'â³ Syncing...' : 'ðŸ”„ Sync Now'}</button>
+          <button onClick={fetchData} style={styles.syncBtn}>{isSyncing ? '⏳ Syncing...' : '🔄 Sync Now'}</button>
         </div>
         <div style={styles.tableResponsive}>
           <table style={styles.table}>
@@ -175,7 +167,6 @@ const AdminDashboard = () => {
     </div>
   );
 
-  // --- View 2: Analytics & Reports ---
   const renderDashboard = () => (
     <div style={styles.fadeAnim}>
       <div style={styles.kpiRow}>
@@ -196,14 +187,13 @@ const AdminDashboard = () => {
             <h3 style={styles.tableHeader}>Automated Export Engine</h3>
             <p style={{fontSize: '0.85rem', color: '#64748b', marginTop: '10px'}}>Generate compliance reports based on your current telemetry filters.</p>
           </div>
-          <button onClick={generatePDF} style={{...styles.actionBtn, backgroundColor: '#e11d48'}}>ðŸ“„ Generate PDF Report</button>
-          <button onClick={generateCSV} style={{...styles.actionBtn, backgroundColor: '#10b981'}}>ðŸ“Š Export CSV Data</button>
+          <button onClick={generatePDF} style={{...styles.actionBtn, backgroundColor: '#e11d48'}}>📄 Generate PDF Report</button>
+          <button onClick={generateCSV} style={{...styles.actionBtn, backgroundColor: '#10b981'}}>📊 Export CSV Data</button>
         </div>
       </div>
     </div>
   );
 
-  // --- View 3: Fleet Location & Dynamic Route ---
   const renderFleetLocation = () => (
     <div style={styles.fadeAnim}>
       <div style={styles.kpiRow}>
@@ -230,7 +220,6 @@ const AdminDashboard = () => {
     </div>
   );
 
-  // --- View 4: Maintenance Hub & Live Tickets ---
   const renderMaintenanceHub = () => (
     <div style={styles.fadeAnim}>
       <div style={{...styles.card, marginBottom: '25px'}}>
@@ -239,7 +228,7 @@ const AdminDashboard = () => {
             <h3 style={styles.tableHeader}>Live Service & Support Tickets</h3>
             <p style={{fontSize: '0.85rem', color: '#64748b'}}>Manage and update tickets raised by citizens and field technicians.</p>
           </div>
-          <button onClick={fetchData} style={styles.syncBtn}>{isSyncing ? 'â³ Syncing...' : 'ðŸ”„ Sync Now'}</button>
+          <button onClick={fetchData} style={styles.syncBtn}>{isSyncing ? '⏳ Syncing...' : '🔄 Sync Now'}</button>
         </div>
         
         <div style={styles.tableResponsive}>
@@ -302,12 +291,12 @@ const AdminDashboard = () => {
       `}</style>
       
       <nav style={styles.sidebar}>
-        <div style={styles.sidebarHeader}><h2 style={styles.brand}>âš™ï¸ IoT Command</h2></div>
+        <div style={styles.sidebarHeader}><h2 style={styles.brand}>⚙️ IoT Command</h2></div>
         <ul style={styles.navList}>
-          <li style={activeTab === 'telemetry' ? styles.navItemActive : styles.navItem} onClick={() => setActiveTab('telemetry')}>ðŸ“¡ Real-Time Telemetry</li>
-          <li style={activeTab === 'dashboard' ? styles.navItemActive : styles.navItem} onClick={() => setActiveTab('dashboard')}>ðŸ“Š Analytics & Reports</li>
-          <li style={activeTab === 'fleet' ? styles.navItemActive : styles.navItem} onClick={() => setActiveTab('fleet')}>ðŸ“ GPS Route Optimization</li>
-          <li style={activeTab === 'maintenance' ? styles.navItemActive : styles.navItem} onClick={() => setActiveTab('maintenance')}>ðŸ”§ Maintenance Hub</li>
+          <li style={activeTab === 'telemetry' ? styles.navItemActive : styles.navItem} onClick={() => setActiveTab('telemetry')}>📡 Real-Time Telemetry</li>
+          <li style={activeTab === 'dashboard' ? styles.navItemActive : styles.navItem} onClick={() => setActiveTab('dashboard')}>📊 Analytics & Reports</li>
+          <li style={activeTab === 'fleet' ? styles.navItemActive : styles.navItem} onClick={() => setActiveTab('fleet')}>📍 GPS Route Optimization</li>
+          <li style={activeTab === 'maintenance' ? styles.navItemActive : styles.navItem} onClick={() => setActiveTab('maintenance')}>🛠️ Maintenance Hub</li>
         </ul>
       </nav>
 
@@ -335,7 +324,6 @@ const AdminDashboard = () => {
   );
 };
 
-// --- Premium Styles Object ---
 const styles = {
   container: { display: 'flex', height: '100vh', backgroundColor: '#f8fafc', fontFamily: "'Inter', 'Segoe UI', Roboto, sans-serif" },
   fadeAnim: { animation: 'fadeIn 0.4s ease-in-out' },
