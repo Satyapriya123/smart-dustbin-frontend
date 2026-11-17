@@ -72,7 +72,7 @@ const SuperAdminDashboard = () => {
     return (
         <div style={styles.layout}>
             <div style={styles.navbar}>
-                <h2 style={styles.navTitle}>SYSTEM OVERRIDE <span style={styles.accent}>// SUPERADMIN</span></h2>
+                <h2 style={styles.navTitle}>SYSTEM OVERRIDE <span style={styles.accent}>{"// SUPERADMIN"}</span></h2>
                 <button onClick={handleLogout} style={styles.logoutBtn}>[ TERMINATE SESSION ]</button>
             </div>
 
