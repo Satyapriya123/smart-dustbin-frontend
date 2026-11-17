@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 const AdminDashboard = () => {
   const [dustbins, setDustbins] = useState([]);
@@ -88,7 +88,7 @@ const AdminDashboard = () => {
     doc.setFontSize(10);
     doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 22);
     const tableData = filteredBins.map(bin => [bin.binId, bin.address || 'Unassigned', `${bin.fillLevel || 0}%`, bin.status.toUpperCase(), bin.updatedAt ? new Date(bin.updatedAt).toLocaleString() : 'N/A']);
-    doc.autoTable({ startY: 30, head: [['Hardware ID', 'Zone', 'Fill Level', 'Status', 'Last Sync']], body: tableData, theme: 'grid', headStyles: { fillColor: [15, 23, 42] } });
+    autoTable(doc, { startY: 30, head: [['Hardware ID', 'Zone', 'Fill Level', 'Status', 'Last Sync']], body: tableData, theme: 'grid', headStyles: { fillColor: [15, 23, 42] } });
     doc.save(`IoT_Report_${new Date().getTime()}.pdf`);
   };
 
