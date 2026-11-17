@@ -36,7 +36,7 @@ const Login = () => {
         <form onSubmit={handleLogin} style={styles.form}>
           <div style={styles.inputGroup}>
             <label style={styles.label}>Email Address</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} required placeholder="Enter your email" />
+            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} required placeholder="Enter your email" />
           </div>
           <div style={styles.inputGroup}>
             <label style={styles.label}>Password</label>
