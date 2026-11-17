@@ -1,6 +1,4 @@
-import { safeStorage } from '../utils/storage';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import jsPDF from 'jspdf';
@@ -14,7 +12,7 @@ const AdminDashboard = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [kpiFilter, setKpiFilter] = useState('all');
   const [isSyncing, setIsSyncing] = useState(false);
-  const navigate = useNavigate();
+  
 
   const fetchData = async () => {
     setIsSyncing(true);
