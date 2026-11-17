@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', address: '', password: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    alert("Registration submitted for " + formData.name + ". Awaiting admin approval.");
-    navigate('/');
+    setIsSubmitting(true);
+    try {
+      await axios.post('https://smart-dustbin-backend-rzjf.onrender.com/api/superadmin/register-request', formData);
+      alert(`Registration submitted for ${formData.name}. Awaiting admin approval.`);
+      navigate('/');
+    } catch (error) {
+      alert(error.response?.data?.error || "Registration failed. Please try again.");
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -22,32 +31,16 @@ const Register = () => {
         <p style={styles.subtitle}>Register for the Smart Dustbin Network</p>
         
         <form onSubmit={handleRegister} style={styles.form}>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Full Name</label>
-            <input type="text" name="name" onChange={handleChange} style={styles.input} required placeholder="John Doe" />
-          </div>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Email Address</label>
-            <input type="email" name="email" onChange={handleChange} style={styles.input} required placeholder="john@example.com" />
-          </div>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Phone Number</label>
-            <input type="tel" name="phone" onChange={handleChange} style={styles.input} required placeholder="+91 9876543210" />
-          </div>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Address / Zone</label>
-            <input type="text" name="address" onChange={handleChange} style={styles.input} required placeholder="Kolkata Sector 5" />
-          </div>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Password</label>
-            <input type="password" name="password" onChange={handleChange} style={styles.input} required placeholder="Create a password" />
-          </div>
-          <button type="submit" style={styles.btn}>Submit Registration</button>
+          <div style={styles.inputGroup}><label style={styles.label}>Full Name</label><input type="text" name="name" onChange={handleChange} style={styles.input} required placeholder="John Doe" /></div>
+          <div style={styles.inputGroup}><label style={styles.label}>Email Address</label><input type="email" name="email" onChange={handleChange} style={styles.input} required placeholder="john@example.com" /></div>
+          <div style={styles.inputGroup}><label style={styles.label}>Phone Number</label><input type="tel" name="phone" onChange={handleChange} style={styles.input} required placeholder="+91 9876543210" /></div>
+          <div style={styles.inputGroup}><label style={styles.label}>Address / Zone</label><input type="text" name="address" onChange={handleChange} style={styles.input} required placeholder="Kolkata Sector 5" /></div>
+          <div style={styles.inputGroup}><label style={styles.label}>Password</label><input type="password" name="password" onChange={handleChange} style={styles.input} required placeholder="Create a password" /></div>
+          <button type="submit" style={styles.btn} disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit Registration'}</button>
         </form>
         
         <div style={styles.footerContainer}>
-          <span style={styles.footerText}>Already have an account? </span>
-          <span onClick={() => navigate('/')} style={styles.linkTextBold}>Return to Login</span>
+          <span style={styles.footerText}>Already have an account? </span><span onClick={() => navigate('/')} style={styles.linkTextBold}>Return to Login</span>
         </div>
       </div>
     </div>
