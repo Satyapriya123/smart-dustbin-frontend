@@ -1,5 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
-import { safeStorage } from "../utils/storage";
+import React, { useEffect, useState } from "react";
 
 const SuperAdminDashboard = () => {
     const [users, setUsers] = useState([]);
