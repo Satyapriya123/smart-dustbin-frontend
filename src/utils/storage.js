@@ -1,30 +1,20 @@
-// Fallback memory store in case browser blocks localStorage
-const memoryStore = {};
-
 export const safeStorage = {
-  getItem: (key) => {
-    try {
-      const val = localStorage.getItem(key);
-      if (val !== null) return val;
-    } catch (e) {
-      // Ignored: browser storage blocked
+    setItem: (key, value) => {
+        try { window.localStorage.setItem(key, value); } 
+        catch (e) { console.warn("Storage blocked by context:", e); }
+    },
+    getItem: (key) => {
+        try { return window.localStorage.getItem(key); } 
+        catch (e) { return null; }
+    },
+    removeItem: (key) => {
+        try { window.localStorage.removeItem(key); } 
+        catch (e) {}
+    },
+    clear: () => {
+        try { 
+            window.localStorage.clear(); 
+            window.sessionStorage.clear(); 
+        } catch (e) { console.warn("Storage clear blocked."); }
     }
-    return memoryStore[key] || null;
-  },
-  setItem: (key, value) => {
-    memoryStore[key] = value;
-    try {
-      localStorage.setItem(key, value);
-    } catch (e) {
-      // Ignored: browser storage blocked
-    }
-  },
-  removeItem: (key) => {
-    delete memoryStore[key];
-    try {
-      localStorage.removeItem(key);
-    } catch (e) {
-      // Ignored: browser storage blocked
-    }
-  }
 };
