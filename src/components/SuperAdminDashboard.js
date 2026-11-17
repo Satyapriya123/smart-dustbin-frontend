@@ -6,8 +6,7 @@ const SuperAdminDashboard = () => {
     const [newEmail, setNewEmail] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newRole, setNewRole] = useState("user");
-    const navigate = useNavigate();
-    const API_URL = "https://smart-dustbin-backend-rzjf.onrender.com/api/superadmin";
+        const API_URL = "https://smart-dustbin-backend-rzjf.onrender.com/api/superadmin";
 
     useEffect(() => {
         fetchUsers();
