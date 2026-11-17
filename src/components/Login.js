@@ -10,18 +10,31 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (email === 'admin@distronix.in' && password === 'admin123') {
+    
+    // 1. Superadmin Login
+    if (email === 'superadmin' && password === 'super123') {
+      safeStorage.setItem('email', email);
+      safeStorage.setItem('name', 'Super Admin');
+      safeStorage.setItem('role', 'superadmin');
+      navigate('/superadmin');
+    } 
+    // 2. Admin Login
+    else if (email === 'admin' && password === '123') {
       safeStorage.setItem('email', email);
       safeStorage.setItem('name', 'System Admin');
       safeStorage.setItem('role', 'admin');
       navigate('/admin');
-    } else if (email.includes('@') && password.length > 3) {
+    } 
+    // 3. Normal User / Citizen Login
+    else if (email.includes('@') && password.length > 3) {
       safeStorage.setItem('email', email);
       safeStorage.setItem('name', email.split('@')[0]);
       safeStorage.setItem('role', 'citizen');
       navigate('/user');
-    } else {
-      setError('Invalid credentials. Citizens can use any valid email.');
+    } 
+    // Invalid
+    else {
+      setError('Invalid credentials. Check your username and password.');
     }
   };
 
@@ -35,8 +48,8 @@ const Login = () => {
         
         <form onSubmit={handleLogin} style={styles.form}>
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Email Address</label>
-            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} required placeholder="Enter your email" />
+            <label style={styles.label}>Email Address / Username</label>
+            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} required placeholder="Enter username or email" />
           </div>
           <div style={styles.inputGroup}>
             <label style={styles.label}>Password</label>
@@ -47,7 +60,8 @@ const Login = () => {
         
         <div style={styles.demoHints}>
           <strong>Demo Access:</strong><br/>
-          Admin: admin@distronix.in / admin123<br/>
+          Superadmin: superadmin / super123<br/>
+          Admin: admin / 123<br/>
           Citizen: Any email / Any password
         </div>
       </div>
