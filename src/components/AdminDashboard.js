@@ -45,8 +45,15 @@ const AdminDashboard = () => {
   }, []);
 
   const handleLogout = () => {
-    safeStorage.clear();
-    navigate('/');
+    try {
+        localStorage.removeItem('email');
+        localStorage.removeItem('name');
+        localStorage.removeItem('role');
+        sessionStorage.clear();
+    } catch (e) {
+        console.warn("Storage restricted by browser.");
+    }
+    window.location.href = "/"; 
   };
 
   // --- Admin Ticket Action Handler ---
