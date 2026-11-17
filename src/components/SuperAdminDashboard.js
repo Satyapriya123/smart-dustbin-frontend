@@ -59,6 +59,15 @@ const SuperAdminDashboard = () => {
         }
     };
 
+    const handleApproveUser = async (userId) => {
+        try {
+            await fetch(`${API_URL}/approve-user/${userId}`, { method: "PUT" });
+            fetchUsers();
+        } catch (error) {
+            alert("Error approving user");
+        }
+    };
+
     const handleLogout = () => {
         try {
             localStorage.clear();
@@ -66,7 +75,7 @@ const SuperAdminDashboard = () => {
         } catch (e) {
             console.warn("Storage clear blocked by browser context.");
         }
-        navigate("/");
+        window.location.href = "/";
     };
 
     return (
@@ -104,12 +113,36 @@ const SuperAdminDashboard = () => {
                             <thead>
                                 <tr>
                                     <th style={styles.th}>IDENTIFIER</th>
-                                    <th style={styles.th}>ACCESS_LEVEL</th>
+                                    <th style={styles.th}>ACCESS_LEVEL / DETAILS</th>
                                     <th style={styles.th}>SYSTEM_MODIFICATION</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map(user => (
+                                {/* Pending Approvals Section */}
+                                {users.filter(u => u.status === 'pending').map(user => (
+                                    <tr key={user._id} style={styles.tr}>
+                                        <td style={styles.td}>
+                                            {user.email} <br/>
+                                            <span style={{fontSize: '0.75rem', color: '#f59e0b', fontWeight: 'bold'}}>PENDING APPROVAL</span>
+                                        </td>
+                                        <td style={styles.td}>
+                                            Name: {user.name || 'N/A'}<br/>
+                                            Phone: {user.phone || 'N/A'}<br/>
+                                            Zone: {user.address || 'N/A'}
+                                        </td>
+                                        <td style={styles.td}>
+                                            <button 
+                                                onClick={() => handleApproveUser(user._id)} 
+                                                style={{...styles.actionBtn, backgroundColor: '#3b82f6', padding: '6px 12px', fontSize: '0.8rem'}}
+                                            >
+                                                APPROVE_ACCOUNT
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+
+                                {/* Approved Active Users Section */}
+                                {users.filter(u => u.status !== 'pending').map(user => (
                                     <tr key={user._id} style={styles.tr}>
                                         <td style={styles.td}>{user.email}</td>
                                         <td style={styles.td}>
