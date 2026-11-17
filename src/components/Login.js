@@ -51,18 +51,22 @@ const Login = () => {
             <label style={styles.label}>Email Address / Username</label>
             <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} required placeholder="Enter username or email" />
           </div>
+          
           <div style={styles.inputGroup}>
             <label style={styles.label}>Password</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={styles.input} required placeholder="Enter password" />
           </div>
+
+          <div style={{ textAlign: 'right', marginTop: '-10px' }}>
+            <span onClick={() => navigate('/forgot-password')} style={styles.linkText}>Forgot Password?</span>
+          </div>
+
           <button type="submit" style={styles.btn}>Secure Login</button>
         </form>
         
-        <div style={styles.demoHints}>
-          <strong>Demo Access:</strong><br/>
-          Superadmin: superadmin / super123<br/>
-          Admin: admin / 123<br/>
-          Citizen: Any email / Any password
+        <div style={styles.footerContainer}>
+          <span style={styles.footerText}>Don't have an account? </span>
+          <span onClick={() => navigate('/register')} style={styles.linkTextBold}>Register Here</span>
         </div>
       </div>
     </div>
@@ -80,7 +84,10 @@ const styles = {
   input: { padding: '12px 15px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0f172a', color: '#fff', fontSize: '1rem', outline: 'none' },
   btn: { padding: '14px', backgroundColor: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px' },
   error: { backgroundColor: 'rgba(225, 29, 72, 0.1)', color: '#f43f5e', padding: '10px', borderRadius: '6px', fontSize: '0.85rem', textAlign: 'center', marginBottom: '20px' },
-  demoHints: { marginTop: '30px', padding: '15px', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '8px', color: '#64748b', fontSize: '0.8rem', textAlign: 'center', lineHeight: '1.6' }
+  linkText: { color: '#3b82f6', fontSize: '0.85rem', cursor: 'pointer', transition: 'color 0.2s' },
+  footerContainer: { marginTop: '25px', textAlign: 'center' },
+  footerText: { color: '#94a3b8', fontSize: '0.9rem' },
+  linkTextBold: { color: '#3b82f6', fontSize: '0.9rem', fontWeight: 'bold', cursor: 'pointer' }
 };
 
 export default Login;
